@@ -41,23 +41,25 @@ window.addEventListener("load", function () {
         this.width,
         this.height
       )
-      context.beginPath()
-      context.arc(
-        this.collisionX,
-        this.collisionY,
-        this.collisionRadius,
-        0,
-        Math.PI * 2
-      )
-      context.save()
-      context.globalAlpha = 0.5
-      context.fill()
-      context.restore()
-      context.stroke()
-      context.beginPath()
-      context.moveTo(this.collisionX, this.collisionY)
-      context.lineTo(this.game.mouse.x, this.game.mouse.y)
-      context.stroke()
+      if (this.game.debug) {
+        context.beginPath()
+        context.arc(
+          this.collisionX,
+          this.collisionY,
+          this.collisionRadius,
+          0,
+          Math.PI * 2
+        )
+        context.save()
+        context.globalAlpha = 0.5
+        context.fill()
+        context.restore()
+        context.stroke()
+        context.beginPath()
+        context.moveTo(this.collisionX, this.collisionY)
+        context.lineTo(this.game.mouse.x, this.game.mouse.y)
+        context.stroke()
+      }
     }
     update() {
       this.dx = this.game.mouse.x - this.collisionX
@@ -104,7 +106,7 @@ window.addEventListener("load", function () {
       this.game = game
       this.collisionX = Math.random() * this.game.width
       this.collisionY = Math.random() * this.game.height
-      this.collisionRadius = 60
+      this.collisionRadius = 40
       this.image = document.getElementById("obstacles")
       this.spriteWidth = 250
       this.spriteHeight = 250
@@ -127,19 +129,21 @@ window.addEventListener("load", function () {
         this.width,
         this.height
       )
-      context.beginPath()
-      context.arc(
-        this.collisionX,
-        this.collisionY,
-        this.collisionRadius,
-        0,
-        Math.PI * 2
-      )
-      context.save()
-      context.globalAlpha = 0.5
-      context.fill()
-      context.restore()
-      context.stroke()
+      if (this.game.debug) {
+        context.beginPath()
+        context.arc(
+          this.collisionX,
+          this.collisionY,
+          this.collisionRadius,
+          0,
+          Math.PI * 2
+        )
+        context.save()
+        context.globalAlpha = 0.5
+        context.fill()
+        context.restore()
+        context.stroke()
+      }
     }
   }
 
@@ -149,6 +153,7 @@ window.addEventListener("load", function () {
       this.width = this.canvas.width
       this.height = this.canvas.height
       this.topMargin = 260
+      this.debug = true
       this.player = new Player(this)
       this.numberOfObstacles = 10
       this.obstacles = []
@@ -174,6 +179,9 @@ window.addEventListener("load", function () {
           this.mouse.x = e.offsetX
           this.mouse.y = e.offsetY
         }
+      })
+      window.addEventListener("keydown", (e) => {
+        if (e.key == "d") this.debug = !this.debug
       })
     }
     render(context) {
