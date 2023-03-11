@@ -6,7 +6,7 @@ window.addEventListener("load", function () {
 
   ctx.fillStyle = "white"
   ctx.lineWidth = 3
-  ctx.strokeStyle = "white"
+  ctx.strokeStyle = "black"
   ctx.font = "40px Helvetica"
   ctx.textAlign = "center"
 
@@ -291,6 +291,11 @@ window.addEventListener("load", function () {
         this.markedForDeletion = true
         this.game.removeGameObjects()
         this.game.score++
+        for (let i = 0; i < 3; i++) {
+          this.game.particles.push(
+            new Firefly(this.game, this.collisionX, this.collisionY, "yellow")
+          )
+        }
       }
       // collision with gameObjects
       let collisionObjects = [this.game.player, ...this.game.obstacles]
@@ -376,6 +381,44 @@ window.addEventListener("load", function () {
     }
   }
 
+  class Particle {
+    constructor(game, x, y, color) {
+      this.game = game
+      this.collisionX = x
+      this.collisionY = y
+      this.color = color
+      this.radius = Math.floor(Math.random() * 10 + 5)
+      this.speedX = Math.random() * 6 - 3
+      this.speedY = Math.random() * 2 + 0.5
+      this.angle = 0
+      this.va = Math.random() * 0.1 + 0.01
+      this.markedForDeletion = false
+    }
+    draw(context) {
+      context.save()
+      context.fillStyle = this.color
+      context.beginPath()
+      context.arc(this.collisionX, this.collisionY, this.radius, 0, Math.PI * 2)
+      context.fill()
+      context.stroke()
+      context.restore()
+    }
+  }
+
+  class Firefly extends Particle {
+    update() {
+      this.angle += this.va
+      this.collisionX += this.speedX
+      this.collisionY -= this.speedY
+      if (this.collisionY < 0 - this.radius) {
+        this.markedForDeletion = true
+        this.game.removeGameObjects()
+      }
+    }
+  }
+
+  class Spark extends Particle {}
+
   class Game {
     constructor(canvas) {
       this.canvas = canvas
@@ -395,6 +438,7 @@ window.addEventListener("load", function () {
       this.eggs = []
       this.enemies = []
       this.hatchlings = []
+      this.particles = []
       this.gameObjects = []
       this.score = 0
       this.lostHatchlings = 0
@@ -434,6 +478,7 @@ window.addEventListener("load", function () {
           ...this.obstacles,
           ...this.enemies,
           ...this.hatchlings,
+          ...this.particles,
         ]
         // sort by vertical position
         this.gameObjects.sort((a, b) => {
@@ -482,6 +527,7 @@ window.addEventListener("load", function () {
       this.hatchlings = this.hatchlings.filter(
         (object) => !object.markedForDeletion
       )
+      this.particles = this.eggs.filter((object) => !object.markedForDeletion)
     }
     init() {
       for (let i = 0; i < 3; i++) {
