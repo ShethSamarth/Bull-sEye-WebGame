@@ -215,6 +215,31 @@ window.addEventListener("load", function () {
     }
   }
 
+  class Larva {
+    constructor(game, x, y) {
+      this.game = game
+      this.collisionX = x
+      this.collisionY = y
+      this.collisionRadius = 30
+      this.image = document.getElementById("larva")
+      this.speedWidth = 150
+      this.speedHeight = 150
+      this.width = this.spriteWeight
+      this.height = this.spriteHeight
+      this.spriteX
+      this.spriteY
+      this.speedY = 1 + Math.random()
+    }
+    draw(context) {
+      context.drawImage(this.image, this.spriteX, this.spriteY)
+    }
+    update() {
+      this.collisionY -= this.speedY
+      this.spriteX = this.collisionX - this.width * 0.5
+      this.spriteY = this.collisionY - this.height * 0.5
+    }
+  }
+
   class Enemy {
     constructor(game) {
       this.game = game
