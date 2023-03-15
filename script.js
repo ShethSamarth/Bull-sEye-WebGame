@@ -483,7 +483,7 @@ window.addEventListener("load", function () {
       this.particles = []
       this.gameObjects = []
       this.score = 0
-      this.winningScore = 10
+      this.winningScore = 50
       this.gameOver = false
       this.lostHatchlings = 0
       this.mouse = {
@@ -571,7 +571,7 @@ window.addEventListener("load", function () {
         context.shadowColor = "black"
         let message1
         let message2
-        if (this.lostHatchlings <= 30) {
+        if (this.lostHatchlings <= 15) {
           message1 = "BullsEye!!!"
           message2 = "You bullied the bullies!"
         } else {
